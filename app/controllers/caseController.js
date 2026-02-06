@@ -1,15 +1,31 @@
+// app/controllers/caseController.js
 const Case = require("../models/Case");
 
 exports.createCase = async (req, res) => {
   try {
-    console.log("Request body:", req.body); // debug input
-    const newCase = await Case.create(req.body);
-    res.json(newCase);
+    const { customer_id, assigned_to, priority, status } = req.body;
+
+    // Validate required fields
+    if (!customer_id || !assigned_to || !priority || !status) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Create new case
+    const newCase = await Case.create({
+      customer_id,
+      assigned_to,
+      priority,
+      status,
+      created_at: new Date(),
+    });
+
+    res.status(201).json(newCase);
   } catch (err) {
-    console.error(err); // log exact error
+    console.error("Error creating case:", err.message); // log the error
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
+
 
 
 exports.updateCase = async (req, res) => {
