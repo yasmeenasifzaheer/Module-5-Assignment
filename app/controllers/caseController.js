@@ -25,6 +25,16 @@ exports.createCase = async (req, res) => {
   }
 };
 
+exports.getCases = async (req, res) => {
+  try {
+    const cases = await Case.find();
+    res.json(cases);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
 // Update an existing case by ID
 exports.updateCase = async (req, res) => {
   try {
